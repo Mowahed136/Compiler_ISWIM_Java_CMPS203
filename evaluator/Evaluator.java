@@ -116,9 +116,10 @@ public class Evaluator {
         ContextAndEnvironment cont = continuation.pop();
         CEKArg22 arg22 = (CEKArg22)cont.context;
         Operators o = arg22.getOperator();
-        //ASTNumber b1 = arg22.getArg();    //TODO waiting for response to find out if arg22 can contain any term or just value terms, not clear in docs.
+        ASTNumber b1 = (ASTNumber)arg22.getArg();
+        ASTNumber delta = (ASTNumber)deltaeval2(o, b1, b);
 
-        return null;
+        return new ContextAndEnvironment(delta, new Environment());
     }
 
 //    private ContextAndEnvironment eval_cek5bp(ContextAndEnvironment ce){
@@ -132,6 +133,7 @@ public class Evaluator {
         CEKArg12 arg12 = (CEKArg12)cont.context;
         CEK n = arg12.getArg();
 
+        continuation.push(new ContextAndEnvironment(new CEKArg22(arg12.getOperator(), v),ce.environment));
         return new ContextAndEnvironment(n, cont.environment);
     }
 
@@ -158,7 +160,7 @@ public class Evaluator {
             case MULTIPLY:
                 return new ASTNumber(b1.getNumber() * b2.getNumber());
             case EXPONENTIATE:
-                return new ASTNumber(b1.getNumber() ^ b2.getNumber());
+                return new ASTNumber((int)Math.pow(b1.getNumber() , b2.getNumber()));
             default:
                 throw new Error("Code Bug");
         }

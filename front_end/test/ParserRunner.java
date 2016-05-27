@@ -1,4 +1,7 @@
 package front_end.test;
+import com.sun.deploy.util.StringUtils;
+import evaluator.Evaluator;
+import evaluator.HaltError;
 import front_end.InputToken;
 import front_end.Parser;
 import front_end.ParserToken;
@@ -29,15 +32,19 @@ public class ParserRunner {
 	}
 	
 	// main function
-	public static void main(String[] args) {
+	public static void main(String[] args) throws HaltError {
 		// the input string
 		//String input = "";
-		String input = "(app(lam x2 (add1 (+ x1 (* x2 (sub1 199)))))(+ 5 3))";
+		//String input = "(app(lam x2 (add1 (+ x1 (* x2 (sub1 199)))))(+ 5 3))";
+		//String input = "( app(lam x x)(+ 2 5) )";
+		String input = args[0];
+		System.out.println(input);
+
 		// output the input token
+
 		Scanner scanner = new Scanner();
 		scanner.scan(input);
 		System.out.println(scanner);
-		
 		// output the parser token
 		Screener screener = new Screener(scanner);
 		screener.screen();
@@ -48,6 +55,8 @@ public class ParserRunner {
 		LinkedList<ParserToken> list = new LinkedList<ParserToken>(screener.getParserTokenList());
 		AST root = parser.parse(list);
 		showR(root, 0);
+		ASTValue result = (new Evaluator()).evaluate(root);
+		System.out.println(result);
 	
 	}
 	

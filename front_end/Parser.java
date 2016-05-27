@@ -48,7 +48,6 @@ public class Parser {
 							node = new ASTOp2(list.get(0).getElement());
 							node.astValue = list.get(0).getElement();
 							list.remove(0);
-							
 							// find the first expression argument
 							if (list.size() > 0) {
 								LinkedList<ParserToken> leftList = new LinkedList<ParserToken>();
@@ -61,7 +60,7 @@ public class Parser {
 									// set the second argument expression
 									list.remove(0);
 									AST childRightNode = parse(list);
-									((ASTOp2)node).setArg1(childRightNode);
+									((ASTOp2)node).setArg2(childRightNode);
 									node.astRight = childRightNode;
 								} else if (list.get(0).getTokenType() == "lp") {
 									Stack<String> stack = new Stack<String>();
@@ -93,7 +92,7 @@ public class Parser {
 									node.astLeft = childLeftNode;
 									// set the rightChild node
 									AST childRightNode = parse(list);
-									((ASTOp2)node).setArg1(childRightNode);
+									((ASTOp2)node).setArg2(childRightNode);
 									node.astRight = childRightNode;
 								}
 							} else {
