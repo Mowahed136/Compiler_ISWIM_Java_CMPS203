@@ -1,2 +1,7 @@
-# ISWIM_Compiler_Java_CMPS203
-ISWIM compiler for CMPS203 class
+# ISWIM Compiler Java CMPS203
+CMPS203 Project
+
+Usage: 
+
+    Evaluator: (new Evaluator()).evaluate(an_ast_tree);
+    Parser:     
