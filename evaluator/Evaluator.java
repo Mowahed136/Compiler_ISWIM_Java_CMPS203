@@ -93,7 +93,7 @@ public class Evaluator {
         CEK m = op2.getArg1();
         CEK n = op2.getArg2();
 
-        continuation.push(new ContextAndEnvironment(new CEKArg12(o,n)));
+        continuation.push(new ContextAndEnvironment(new CEKArg12(o,n), ce.environment));
         return new ContextAndEnvironment(m,ce.environment);
     }
 
@@ -121,11 +121,7 @@ public class Evaluator {
 
         return new ContextAndEnvironment(delta, new Environment());
     }
-
-//    private ContextAndEnvironment eval_cek5bp(ContextAndEnvironment ce){
-//        //TODO waiting on question
-//        return null;
-//    }
+    
 
     private ContextAndEnvironment eval_cek6b(ContextAndEnvironment ce){
         ASTValue v = (ASTValue)ce.context;
