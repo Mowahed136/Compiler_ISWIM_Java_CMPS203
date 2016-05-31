@@ -7,4 +7,4 @@ javac -cp . -d . ./evaluator/test/*.java
 javac -cp . -d . ./front_end/*.java
 javac -cp . -d . ./front_end/test/*.java
 
-java ParserRunner < test_input.txt > test_output.txt
+java ParserRunner < test_input.txt > temp
