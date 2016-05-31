@@ -48,12 +48,23 @@ public class Screener {
 
 	public String toString() {
 		StringBuilder sb = new StringBuilder();
+		sb.append("  ");
 		for (ParserToken o : outputList) {
-			sb.append(o.getTokenType());
-			sb.append(":");
-			sb.append(o.getElement());
-			sb.append('\n');
+			if (o.getTokenType() == "lp") {
+				sb.append("Lparen");
+			} else if (o.getTokenType() == "rp") {
+				sb.append("Rparen");
+			} else if (o.getTokenType() == "lam" || o.getTokenType() == "app"){
+				sb.append(o.getTokenType());
+			} else {
+				sb.append(o.getTokenType());
+				sb.append("(");
+				sb.append(o.getElement());
+				sb.append(")");
+			}
+			sb.append(",");
+			sb.append(" ");
 		}
-		return sb.toString();
+		return sb.substring(0, sb.length() - 2);
 	}
 }

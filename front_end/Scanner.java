@@ -46,12 +46,19 @@ public class Scanner {
 	}
 	public String toString() {
 		StringBuilder sb = new StringBuilder();
+		sb.append("  ");
 		for (InputToken i : inputList) {
 			sb.append(i.getTokenType());
-			sb.append(":");
-			sb.append(i.getElement());
-			sb.append('\n');
+			if (i.getTokenType() == "ID" || i.getTokenType() == "NUM" ||
+					i.getTokenType() == "var" || i.getTokenType() == "OP") {
+				sb.append("(");
+				sb.append(i.getElement());
+				sb.append(")");
+			}
+			sb.append(",");
+			sb.append(" ");
 		}
-		return sb.toString();
+
+		return sb.substring(0,sb.length()-2);
 	}
 }

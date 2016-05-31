@@ -15,10 +15,12 @@ public class Parser {
 		// check the first item in the expression
 		if (firstItem.getTokenType() == "num") {
 			 node = new ASTNumber(Integer.valueOf(firstItem.getElement()));
+			 node.astType = firstItem.getTokenType();
 			 node.astValue = firstItem.getElement();
 			 return node;
 		} else if (firstItem.getTokenType() == "var") {
 			node = new ASTVariable(firstItem.getElement());
+			node.astType = firstItem.getTokenType();
 			node.astValue = firstItem.getElement();
 			return node;
 		} else if (firstItem.getTokenType() == "lp") {
@@ -38,6 +40,7 @@ public class Parser {
 						// generate the node 
 						node = new ASTOp1(list.get(0).getElement());
 						node.astValue = list.get(0).getElement();
+						node.astType = list.get(0).getTokenType();
 						list.remove(0);
 						// add the child node
 						AST childNode = parse(list);
@@ -47,6 +50,7 @@ public class Parser {
 							// generate the node
 							node = new ASTOp2(list.get(0).getElement());
 							node.astValue = list.get(0).getElement();
+							node.astType = list.get(0).getTokenType();
 							list.remove(0);
 							// find the first expression argument
 							if (list.size() > 0) {
@@ -103,6 +107,7 @@ public class Parser {
 							// generate the node
 							node = new ASTLambda();	
 							node.astValue = list.get(0).getElement();
+							node.astType = list.get(0).getTokenType();
 							list.remove(0);
 							
 							// find the first var argument 
@@ -129,6 +134,7 @@ public class Parser {
 							// generate the node
 							node = new ASTApply();
 							node.astValue = list.get(0).getElement();
+							node.astType = list.get(0).getTokenType();
 							list.remove(0);
 							
 							// find the first expression argument
@@ -203,7 +209,36 @@ public class Parser {
 		return node;
 	}
 	
-	
+	public String printTree(AST root) {
+		if (root == null) {
+			return "";
+		}
+		if (root.astRight == null && root.astLeft == null) {
+			if (root.astType == "var") {
+				return "var(" + root.astValue + ")";
+			} else if (root.astType == "num") {
+				return "num(" + root.astValue + ")";
+			}
+			return root.astValue;
+		}
+		else if (root.astRight == null) {
+			if (root.astType == "op1") {
+				return "op1("+ root.astValue+ ", "+ printTree(root.astLeft) +")";
+			}
+			return "(" + printTree(root.astLeft) +")";
+		} else {
+			String left = printTree(root.astLeft);
+			String right = printTree(root.astRight);
+			if (root.astType == "op2") {
+				return "op2("+ root.astValue+ ", "+ left + ", " + right + ")";
+			} else if (root.astType == "lam") {
+				return "lam(" + root.astLeft.astValue + ", "+ right + ")";
+			} else if (root.astType == "app") {
+				return "app(" + left + ", " + right + ")";
+			}
+			return "(" + left + ", " + right + ")";
+		}
+	}
 
 	
 }
