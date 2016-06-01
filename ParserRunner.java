@@ -78,12 +78,17 @@ public class ParserRunner {
 
 				// generate the evaluation answer
 
+
+
+
+
 				ASTValue result = null;
 				try {
 					result = (new Evaluator()).evaluate(root);
 				}catch(HaltError e){
-					System.out.print("Answer:\n  Stuck");
+					System.out.print("Answer:\n  Stuck\n\n");
 					//return;
+					continue;
 				}
 				System.out.println("Answer:");
 

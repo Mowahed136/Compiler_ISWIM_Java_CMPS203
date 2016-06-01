@@ -54,7 +54,7 @@ public class Evaluator {
     }
 
     private ContextAndEnvironment eval_cek3(ContextAndEnvironment ce) throws HaltError{
-        System.out.println("  [cek3]");
+
 
         ASTLambda lam = null;
         Environment contenv = null;
@@ -70,6 +70,7 @@ public class Evaluator {
         }catch(Exception e){
             throw new HaltError();
         }
+        System.out.println("  [cek3]");
         return new ContextAndEnvironment(lam.getBody(), contenv);                           // Return the body of the lambda expression and the environment from the stack
     }
 
@@ -89,10 +90,16 @@ public class Evaluator {
         return new ContextAndEnvironment(n ,cont.environment);                              // Return the value and environment from the stack
     }
 
-    private ContextAndEnvironment eval_cek7(ContextAndEnvironment ce){
+    private ContextAndEnvironment eval_cek7(ContextAndEnvironment ce) throws HaltError{
+        ASTVariable x = null;
+        CEK c = null;
+        try{
+          x = (ASTVariable)ce.context;
+          c = ce.environment.get(x);
+          if(c == null) throw new HaltError();
+        }catch(Exception e){ throw new HaltError(); }
         System.out.println("  [cek7]");
-        ASTVariable x = (ASTVariable)ce.context;
-        return new ContextAndEnvironment(ce.environment.get(x), new Environment());
+        return new ContextAndEnvironment(c, new Environment());
     }
 
     private ContextAndEnvironment eval_cek2a(ContextAndEnvironment ce){
@@ -178,7 +185,7 @@ public class Evaluator {
             case MULTIPLY:
                 return new ASTNumber(b1.getNumber() * b2.getNumber());
             case EXPONENTIATE:
-                return new ASTNumber((int)Math.pow(b1.getNumber() , b2.getNumber()));
+                return new ASTNumber((int)Math.floor(Math.pow(b1.getNumber() , b2.getNumber())));
             default:
                 throw new Error("Code Bug");
         }
