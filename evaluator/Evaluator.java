@@ -18,6 +18,7 @@ public class Evaluator {
      */
     public ASTValue evaluate(AST context) throws HaltError {
         ContextAndEnvironment ce = new ContextAndEnvironment(context);
+        System.out.println("Sequence of rules:");
 
         //
         // EVALUATION LOOP
@@ -46,6 +47,7 @@ public class Evaluator {
     // EVALUATION IMPLEMENTATIONS
     //
     private ContextAndEnvironment eval_cek1(ContextAndEnvironment ce){
+        System.out.println("  [cek1]");
         ASTApply app = (ASTApply)ce.context;
         continuation.push(new ContextAndEnvironment(new CEKArg(app.getArgument()), ce.environment));    // Push argument on stack
         return new ContextAndEnvironment(app.getFunction(), ce.environment);                            // Return function as context
@@ -121,7 +123,7 @@ public class Evaluator {
 
         return new ContextAndEnvironment(delta, new Environment());
     }
-    
+
 
     private ContextAndEnvironment eval_cek6b(ContextAndEnvironment ce){
         ASTValue v = (ASTValue)ce.context;

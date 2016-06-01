@@ -1,4 +1,4 @@
-//package front_end.test;
+package front_end.test;
 //import com.sun.deploy.util.StringUtils;
 import evaluator.Evaluator;
 import evaluator.HaltError;
