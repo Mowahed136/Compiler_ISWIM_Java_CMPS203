@@ -83,7 +83,7 @@ public class ParserRunner {
 					result = (new Evaluator()).evaluate(root);
 				}catch(HaltError e){
 					System.out.print("Answer:\n  Stuck");
-					return;
+					//return;
 				}
 				System.out.println("Answer:");
 
