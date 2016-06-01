@@ -53,34 +53,50 @@ public class Evaluator {
         return new ContextAndEnvironment(app.getFunction(), ce.environment);                            // Return function as context
     }
 
-    private ContextAndEnvironment eval_cek3(ContextAndEnvironment ce){
-        // Question: what do you do if V = X in [cek3]?
-        ASTValue v = (ASTValue)ce.context;
-        Environment e = ce.environment;
-        ContextAndEnvironment cont = continuation.pop();
-        CEKFun fun = (CEKFun)cont.context;
-        Environment contenv = cont.environment;
-        ASTLambda lam = (ASTLambda)fun.getValue();
+    private ContextAndEnvironment eval_cek3(ContextAndEnvironment ce) throws HaltError{
+        System.out.println("  [cek3]");
 
-        contenv.put(lam.getBoundVariable(), ce.context);                                    // Add the value term and current context to the environment
+        ASTLambda lam = null;
+        Environment contenv = null;
+        try {
+            ASTValue v = (ASTValue) ce.context;
+            Environment e = ce.environment;
+            ContextAndEnvironment cont = continuation.pop();
+            CEKFun fun = (CEKFun) cont.context;
+            contenv = cont.environment;
+            lam = (ASTLambda) fun.getValue();
+
+            contenv.put(lam.getBoundVariable(), ce.context);                                    // Add the value term and current context to the environment
+        }catch(Exception e){
+            throw new HaltError();
+        }
         return new ContextAndEnvironment(lam.getBody(), contenv);                           // Return the body of the lambda expression and the environment from the stack
     }
 
-    private ContextAndEnvironment eval_cek4(ContextAndEnvironment ce){
-        ASTValue v = (ASTValue)ce.context;
-        ContextAndEnvironment cont = continuation.pop();                                    // Pull the continuation from the stack
-        CEKArg cekarg = (CEKArg)cont.context;
-        AST n = (AST)cekarg.getClosure();
-        continuation.push( new ContextAndEnvironment(new CEKFun(v), ce.environment) );      // Push a function with the original value term and environment
+    private ContextAndEnvironment eval_cek4(ContextAndEnvironment ce) throws HaltError {
+        AST n = null;
+        ContextAndEnvironment cont = null;
+        try {
+            ASTValue v = (ASTValue) ce.context;
+            cont = continuation.pop();                                    // Pull the continuation from the stack
+            CEKArg cekarg = (CEKArg) cont.context;
+            n = (AST) cekarg.getClosure();
+            continuation.push(new ContextAndEnvironment(new CEKFun(v), ce.environment));      // Push a function with the original value term and environment
+        }catch(Exception e){
+            throw new HaltError();
+        }
+        System.out.println("  [cek4]");
         return new ContextAndEnvironment(n ,cont.environment);                              // Return the value and environment from the stack
     }
 
     private ContextAndEnvironment eval_cek7(ContextAndEnvironment ce){
+        System.out.println("  [cek7]");
         ASTVariable x = (ASTVariable)ce.context;
         return new ContextAndEnvironment(ce.environment.get(x), new Environment());
     }
 
     private ContextAndEnvironment eval_cek2a(ContextAndEnvironment ce){
+        System.out.println("  [cek2a]");
         ASTOp1 op1 = (ASTOp1)ce.context;
         Operators o = op1.getOperator();
         CEK m = op1.getArg1();
@@ -90,6 +106,7 @@ public class Evaluator {
     }
 
     private ContextAndEnvironment eval_cek2b(ContextAndEnvironment ce){                     // Slides seem wrong on this one, they don't consider N
+        System.out.println("  [cek2b]");
         ASTOp2 op2 = (ASTOp2)ce.context;
         Operators o = op2.getOperator();
         CEK m = op2.getArg1();
@@ -100,6 +117,7 @@ public class Evaluator {
     }
 
     private ContextAndEnvironment eval_cek5a(ContextAndEnvironment ce){
+        System.out.println("  [cek5a]");
         ASTNumber b = (ASTNumber)ce.context;
         ContextAndEnvironment cont = continuation.pop();
         CEKArg11 arg11 = (CEKArg11)cont.context;
@@ -114,6 +132,7 @@ public class Evaluator {
 //    }
 
     private ContextAndEnvironment eval_cek5b(ContextAndEnvironment ce){
+        System.out.println("  [cek5b]");
         ASTNumber b = (ASTNumber)ce.context;
         ContextAndEnvironment cont = continuation.pop();
         CEKArg22 arg22 = (CEKArg22)cont.context;
@@ -126,6 +145,7 @@ public class Evaluator {
 
 
     private ContextAndEnvironment eval_cek6b(ContextAndEnvironment ce){
+        System.out.println("  [cek6b]");
         ASTValue v = (ASTValue)ce.context;
         ContextAndEnvironment cont = continuation.pop();
         CEKArg12 arg12 = (CEKArg12)cont.context;
