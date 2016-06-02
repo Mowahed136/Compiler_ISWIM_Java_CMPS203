@@ -57,21 +57,24 @@ public class Evaluator {
 
 
         ASTLambda lam = null;
-        Environment contenv = null;
+        Environment eprime = null;
+        Environment e = null;
+        CEK m = null;
         try {
             ASTValue v = (ASTValue) ce.context;
-            Environment e = ce.environment;
+            e = ce.environment;
             ContextAndEnvironment cont = continuation.pop();
             CEKFun fun = (CEKFun) cont.context;
-            contenv = cont.environment;
+            eprime = cont.environment;
             lam = (ASTLambda) fun.getValue();
+            m = lam.getBody();
 
-            contenv.put(lam.getBoundVariable(), ce.context);                                    // Add the value term and current context to the environment
-        }catch(Exception e){
+            eprime.put(lam.getBoundVariable(), ce);                                    // Add the value term and current context to the environment
+        }catch(Exception exception){
             throw new HaltError();
         }
         System.out.println("  [cek3]");
-        return new ContextAndEnvironment(lam.getBody(), contenv);                           // Return the body of the lambda expression and the environment from the stack
+        return new ContextAndEnvironment(m, eprime);                           // Return the body of the lambda expression and the environment from the stack
     }
 
     private ContextAndEnvironment eval_cek4(ContextAndEnvironment ce) throws HaltError {
@@ -92,14 +95,14 @@ public class Evaluator {
 
     private ContextAndEnvironment eval_cek7(ContextAndEnvironment ce) throws HaltError{
         ASTVariable x = null;
-        CEK c = null;
+        ContextAndEnvironment c = null;
         try{
           x = (ASTVariable)ce.context;
           c = ce.environment.get(x);
           if(c == null) throw new HaltError();
         }catch(Exception e){ throw new HaltError(); }
         System.out.println("  [cek7]");
-        return new ContextAndEnvironment(c, new Environment());
+        return c;
     }
 
     private ContextAndEnvironment eval_cek2a(ContextAndEnvironment ce){
