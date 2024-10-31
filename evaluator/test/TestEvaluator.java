@@ -25,3 +25,5 @@ public class TestEvaluator {
     }
 
 }
+public static void main(String
+                        
